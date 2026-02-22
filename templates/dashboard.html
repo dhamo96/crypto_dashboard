@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard | Crypto Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+</head>
+<body>
+    <header>
+        <h1>Crypto Dashboard</h1>
+        <nav>
+            <a href="/portfolio">Portfolio</a>
+            <a href="/alert">Alerts</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2 style="text-align:center;">Welcome, {{ session.email }}</h2>
+
+        <!-- Portfolio Cards -->
+        <div class="card-grid">
+        {% for coin in portfolio %}
+            <div class="coin-card">
+                <h3>{{ coin.coin }}</h3>
+                <p>Quantity: {{ coin.quantity }}</p>
+                <p>Buy Price: ${{ coin.buy_price }}</p>
+                <p>Current Price: ${{ coin.current_price }}</p>
+                <p>Change 24h: 
+                    <span class="{{ 'positive' if coin.change_24h >=0 else 'negative' }}">
+                        {{ coin.change_24h }}%
+                    </span>
+                </p>
+                <p>Total Value: ${{ (coin.quantity * coin.current_price) | round(2) }}</p>
+            </div>
+        {% endfor %}
+        </div>
+
+        <!-- Portfolio Value Chart -->
+        <!-- <div class="chart-container">
+            <canvas id="portfolioChart"></canvas>
+        </div> -->
+    </div>
+
+<!-- <script>
+var ctx = document.getElementById('portfolioChart').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for c in portfolio %}'{{ c.coin }}',{% endfor %}],
+        datasets: [{
+            label: 'Total Value (USD)',
+            data: [{% for c in portfolio %}{{ (c.quantity * c.current_price) | round(2) }},{% endfor %}],
+            backgroundColor: 'rgba(65, 184, 131, 0.7)'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
+</script> -->
+</body>
+</html>
